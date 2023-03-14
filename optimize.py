@@ -2,8 +2,10 @@ from gensim import corpora
 from gensim.models import LdaModel
 from gensim.models.coherencemodel import CoherenceModel
 from gensim.parsing.preprocessing import preprocess_string
+import glob
 import json
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 import pandas as pd
 import time
@@ -35,7 +37,7 @@ def make_tokenized_lst(raw_csv_path, col_name, stopwords_csv_path):
     tokenized_lst = tokenized_df.to_list()
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time-start_time, 2)}s")
 
     return tokenized_lst
 
@@ -89,19 +91,22 @@ def get_best_passes(tokenized_lst, dest_dir_path, chunk_size=2000, iteration=600
     title_font = {'fontsize': 12, 'fontweight': 'bold'}
 
     plt.figure(figsize=(10, 6))
+    plt.style.use('seaborn-v0_8-whitegrid')
     plt.plot(passes, coherence_scores)
     plt.title('Coherence distribution with N passes', fontdict=title_font, loc='center', pad=10)
+    plt.xticks(np.arange(min(passes), max(passes)+1, step=1))
     plt.xlabel('Number of passes')
     plt.ylabel('Coherence scores')
-    plt.style.use('seaborn-whitegrid')
+
     plt.savefig(os.path.sep.join([dest_dir_path, f"coherence_npasses_({n_topics}_topics)_lda.png"]), dpi=600)
 
     plt.figure(figsize=(10, 6))
+    plt.style.use('seaborn-v0_8-whitegrid')
     plt.plot(passes, perplexity_scores)
     plt.title('Perplexity distribution with N passes', fontdict=title_font, loc='center', pad=10)
+    plt.xticks(np.arange(min(passes), max(passes)+1, step=1))
     plt.xlabel('Number of passes')
     plt.ylabel('Perplexity scores')
-    plt.style.use('seaborn-whitegrid')
     plt.savefig(os.path.sep.join([dest_dir_path, f"perplexity_npasses_({n_topics}_topics)_lda.png"]), dpi=600)
 
     result_df = pd.DataFrame(zip(passes, coherence_scores, perplexity_scores),
@@ -110,7 +115,7 @@ def get_best_passes(tokenized_lst, dest_dir_path, chunk_size=2000, iteration=600
                      encoding="utf-8-sig")
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time-start_time, 2)}s")
 
 
 def get_best_topics(tokenized_lst, dest_dir_path, chunk_size=2000, iteration=600, n_passes=20, max_n_topics=50):
@@ -157,18 +162,20 @@ def get_best_topics(tokenized_lst, dest_dir_path, chunk_size=2000, iteration=600
     title_font = {'fontsize': 12, 'fontweight': 'bold'}
 
     plt.figure(figsize=(10, 6))
+    plt.style.use('seaborn-v0_8-whitegrid')
     plt.plot(n_topics_val, coherence_val)
     plt.title('Coherence distribution with N topics', fontdict=title_font, loc='center', pad=10)
+    plt.xticks(np.arange(min(n_topics_val), max(n_topics_val)+1, step=1))
     plt.xlabel('Number of topics')
-    plt.style.use('seaborn-whitegrid')
     plt.savefig(os.path.sep.join([dest_dir_path, f"coherence_ntopics_({n_passes}_passes)_lda.png"]), dpi=600)
 
     plt.figure(figsize=(10, 6))
+    plt.style.use('seaborn-v0_8-whitegrid')
     plt.plot(n_topics_val, perplexity_val)
     plt.title('Perplexity distribution with N topics', fontdict=title_font, loc='center', pad=10)
+    plt.xticks(np.arange(min(n_topics_val), max(n_topics_val)+1, step=1))
     plt.xlabel('Number of topics')
     plt.ylabel('Perplexity scores')
-    plt.style.use('seaborn-whitegrid')
     plt.savefig(os.path.sep.join([dest_dir_path, f"perplexity_ntopics_({n_passes}_passes)_lda.png"]), dpi=600)
 
     result_df = pd.DataFrame(zip(n_topics_val, coherence_val, perplexity_val),
@@ -177,12 +184,12 @@ def get_best_topics(tokenized_lst, dest_dir_path, chunk_size=2000, iteration=600
                      encoding="utf-8-sig")
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time-start_time, 2)}s")
 
 
 def main():
     config_json_dir = "./config/"
-    config_paths = os.path.sep.join[config_json_dir, "*.json"]
+    config_paths = glob.glob(os.path.sep.join([config_json_dir, "*.json"]))
 
     for config_path in config_paths:
         with open(config_path, 'r', encoding='utf-8') as f:

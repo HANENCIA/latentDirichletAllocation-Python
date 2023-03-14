@@ -17,7 +17,7 @@ def make_keyword_df(raw_csv_path, date_col_name, keyword_col_name):
     :return:
     """
     start_time = time.time()
-    print("INFO: Making keyword dataframe from " + str(raw_csv_path))
+    print(f"INFO: Making keyword dataframe from {raw_csv_path}")
 
     raw_df = pd.read_csv(raw_csv_path)
 
@@ -30,7 +30,7 @@ def make_keyword_df(raw_csv_path, date_col_name, keyword_col_name):
     keyword_df.index = date_df[date_col_name]
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
     return keyword_df
 
@@ -44,7 +44,7 @@ def remove_stopwords(keyword_df, stopwords_csv_path):
     :return:
     """
     start_time = time.time()
-    print("INFO: Removing stopwords from : " + str(stopwords_csv_path))
+    print(f"INFO: Removing stopwords from {stopwords_csv_path}")
 
     stopwords_lst = pd.read_csv(stopwords_csv_path, sep=",", encoding="utf-8")['STOPWORDS'].tolist()
     keyword_df = keyword_df.dropna().str.replace(",", " ")
@@ -58,7 +58,7 @@ def remove_stopwords(keyword_df, stopwords_csv_path):
         keyword_df[idx] = " ".join(tmp_lst)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
     return keyword_df
 
@@ -79,7 +79,7 @@ def count_vectorizer(keyword_df, max_features=100000):
     count_dtm = count_vector.fit_transform(keyword_lst)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
     return count_dtm, count_vector
 
@@ -115,6 +115,6 @@ def tfidf_vectorizer(keyword_df, ngram_max=1, max_df=0.6, min_df=1, max_features
     tfidf_dtm = tfidf_vector.fit_transform(keyword_lst)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
     return tfidf_dtm, tfidf_vector

@@ -7,12 +7,12 @@
   },
   "OPTIMIZE": {
     "CHUNK_SIZE": 2000,
-    "ITERATION": 500,
-    "GET_PASSES_N_TOPICS": 20,
-    "GET_PASSES_MAX_N_PASSES": 10,
-    "GET_TOPICS_N_PASSES": 20,
-    "GET_PASSES_MAX_N_TOPICS": 10,
-    "RESULT_DIR_PATH": "./result/optimize"
+    "ITERATION": 10,
+    "GET_PASSES_N_TOPICS": 10,
+    "GET_PASSES_MAX_N_PASSES": 1,
+    "GET_TOPICS_N_PASSES": 5,
+    "GET_PASSES_MAX_N_TOPICS": 1,
+    "RESULT_DIR_PATH": "./result/sample/optimize"
   },
   "EDA": {
     "NUM_OF_ARTICLES_GRAPH_PATH": "./result/sample/num_of_articles.png",
@@ -26,8 +26,8 @@
     "TFIDF_MIN_DF": 1
   },
   "TM": {
-    "N_TOPICS": 11,
-    "N_ITER": 50,
+    "N_TOPICS": 5,
+    "N_ITER": 10,
     "RANDOM_STATE": 0
   },
   "RESULT_TOPIC_WORDS": {
@@ -45,7 +45,7 @@
     "N_COMPONENTS": 2,
     "PERPLEXITY": 50,
     "LEARNING_RATE": 100,
-    "N_ITER": 2000,
+    "N_ITER": 250,
     "RANDOM_STATE": 0,
     "ANGLE": 0.75,
     "N_JOBS": -1,
@@ -59,7 +59,7 @@
     "TOPIC_MATRIX_PATH": "./model/topic_matrix.bin"
   },
   "TOPIC_DISTRIBUTION": {
-    "TOP_N": 5,
+    "TOP_N": 10,
     "CSV_PATH": "./result/sample/topic_distribution.csv"
   }
 }

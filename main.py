@@ -13,10 +13,9 @@ def warning_handler(*args, **kwargs):
 
 warnings.warn = warning_handler
 
+import glob
 import json
-from matplotlib import font_manager, rc
 import os
-import platform
 
 import eda
 import graph
@@ -27,18 +26,8 @@ import tsne
 
 
 def main():
-    """ Hangul font setting (for Windows/Mac OS) """
-    if platform.system() == "Windows":
-        font_name = font_manager.FontProperties(
-            fname=str(os.path.join(os.environ["WINDIR"], "Fonts")) + "/malgun.ttf").get_name()
-        rc('font', family=font_name)
-    elif platform.system() == "Darwin":
-        rc("font", family="AppleGothic")
-    elif platform.system() == "Linux":
-        rc("font", family="NanumGothic")
-
     config_json_dir = "./config/"
-    config_paths = os.path.sep.join[config_json_dir, "*.json"]
+    config_paths = glob.glob(os.path.sep.join([config_json_dir, "*.json"]))
 
     for config_path in config_paths:
         with open(config_path, 'r', encoding='utf-8') as f:
@@ -65,7 +54,6 @@ def main():
 
         # 2. Remove Stopwords
         keyword_df = preprocessing.remove_stopwords(keyword_df, stopwords_csv_path)
-        print(f"Cleaned Document Shape: {keyword_df.shape}")
 
         # 3. EDA: Make bar chart of article counts with year, month, and day
         num_of_articles_graph_path = config['EDA']['NUM_OF_ARTICLES_GRAPH_PATH']
@@ -76,18 +64,14 @@ def main():
         top_freq_words_graph_path = config['EDA']['TOP_FREQ_WORDS_GRAPH_PATH']
         eda.make_top_n_words_graph(keyword_df, top_n, top_freq_words_graph_path)
 
-        # 5: Vectorize (Count Vectorizer or TF-IDF Vectorizer)
+        # 5: Vectorize (TF-IDF Vectorizer)
         max_features = config['VECTORIZER']['MAX_FEATURES']
         tfidf_ngram_max = config['VECTORIZER']['TFIDF_NGRAM_MAX']
         tfidf_max_df = config['VECTORIZER']['TFIDF_MAX_DF']
         tfidf_min_df = config['VECTORIZER']['TFIDF_MIN_DF']
 
-        # Count Vectorizer (not used)
-        # dtm, vector = preprocessing.vectorizer(keyword_df, max_features)
-
-        # TF-IDF Vectorizer
-        dtm, vector = preprocessing.vectorizer(keyword_df, tfidf_ngram_max, tfidf_max_df,
-                                               tfidf_min_df, max_features)
+        dtm, vector = preprocessing.tfidf_vectorizer(keyword_df, tfidf_ngram_max, tfidf_max_df, tfidf_min_df,
+                                                     max_features)
 
         # 6: Latent Dirichlet Allocation (LDA)
         n_topics = config['TM']['N_TOPICS']
@@ -128,7 +112,7 @@ def main():
 
         # 11: Get Results: LDAvis
         ldavis_graph_path = config['RESULT_LDAVIS']['GRAPH_PATH']
-        ldavis.make_ldavis_graph(lda_model, dtm, vector, ldavis_graph_path)
+        ldavis.make_ldavis(lda_model, dtm, vector, ldavis_graph_path)
 
         # 12: Save LDA Model
         lda_model_path = config['DUMP']['MODEL_PATH']

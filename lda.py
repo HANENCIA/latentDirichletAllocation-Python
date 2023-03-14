@@ -30,7 +30,7 @@ def topic_modeling(keyword_dtm, n_topics, learning_method="batch", max_iter=100,
     lda_topic_matrix = lda_model.fit_transform(keyword_dtm)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
     return lda_model, lda_topic_matrix
 
@@ -47,7 +47,7 @@ def get_topic_words(topic_matrix, keyword_dtm, n_words, n_topics, vectorizer, de
     :param dest_path
     """
     start_time = time.time()
-    print("INFO: Saving topic data into " + str(dest_path))
+    print(f"INFO: Saving topic data into {dest_path}")
 
     keys = common.get_keys(topic_matrix)
 
@@ -56,14 +56,13 @@ def get_topic_words(topic_matrix, keyword_dtm, n_words, n_topics, vectorizer, de
 
     result_lst = []
     for i in range(len(top_n_words_lda)):
-        print(f"Topic {(i + 1)}: {top_n_words_lda[i]}")
         result_lst.append([f"Topic {(i + 1)}", top_n_words_lda[i]])
 
     result_df = pd.DataFrame(data=result_lst, columns=["Topic No.", "Topics"])
     result_df.to_csv(dest_path, sep=",", encoding="utf-8-sig", index=False)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
 
 def get_topic_distribution(topic_matrix):
@@ -91,6 +90,9 @@ def get_topic_distribution_top_n(raw_csv_path, lda_model_path, lda_topic_matrix_
     :param top_n:
     :param dest_path
     """
+    start_time = time.time()
+    print(f"INFO: Saving topic distribution data into {dest_path}")
+
     raw_df = pd.read_csv(raw_csv_path)
 
     lda_model, lda_topic_matrix = load_lda_model(
@@ -106,6 +108,9 @@ def get_topic_distribution_top_n(raw_csv_path, lda_model_path, lda_topic_matrix_
 
     result_df.to_csv(dest_path, sep=",", encoding="utf-8-sig", index=False)
 
+    end_time = time.time()
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
+
 
 def load_lda_model(model_path, topic_matrix_path):
     """
@@ -115,21 +120,21 @@ def load_lda_model(model_path, topic_matrix_path):
     :param topic_matrix_path:
     """
     start_time = time.time()
-    print("INFO: Loading LDA model from " + str(model_path))
+    print(f"INFO: Loading LDA model from {model_path}")
 
     with open(model_path, 'rb') as f:
         lda_model = pickle.load(f)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
-    print("INFO: Loading topic matrix from " + str(topic_matrix_path))
+    print(f"INFO: Loading topic matrix from {topic_matrix_path}")
 
     with open(topic_matrix_path, 'rb') as f:
         lda_topic_matrix = pickle.load(f)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
     return lda_model, lda_topic_matrix
 
@@ -144,18 +149,18 @@ def save_lda_model(lda_model, lda_topic_matrix, model_path, topic_matrix_path):
     :param topic_matrix_path:
     """
     start_time = time.time()
-    print("INFO: Saving LDA model to " + str(model_path))
+    print(f"INFO: Saving LDA model to {model_path}")
 
     with open(model_path, 'wb') as f:
         pickle.dump(lda_model, f)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
-    print("INFO: Saving topic matrix to " + str(topic_matrix_path))
+    print(f"INFO: Saving topic matrix to {topic_matrix_path}")
 
     with open(topic_matrix_path, 'wb') as f:
         pickle.dump(lda_topic_matrix, f)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")

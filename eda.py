@@ -3,6 +3,9 @@
 from collections import Counter
 from itertools import chain
 import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+import os
+import platform
 import time
 
 
@@ -14,7 +17,14 @@ def make_num_of_articles_graph(kwd_df, dest_path):
     :param dest_path:
     """
     start_time = time.time()
-    print("INFO: Making Num of Articles graph to " + str(dest_path))
+    print(f"INFO: Saving Num of Articles graph to {dest_path}")
+
+    if platform.system() == "Windows":
+        font_name = font_manager.FontProperties(
+            fname=str(os.path.join(os.environ["WINDIR"], "Fonts")) + "/malgun.ttf").get_name()
+        rc('font', family=font_name)
+    elif platform.system() == "Darwin":
+        rc("font", family="AppleGothic")
 
     monthly_counts = kwd_df.resample('M').count()
     yearly_counts = kwd_df.resample('A').count()
@@ -28,11 +38,11 @@ def make_num_of_articles_graph(kwd_df, dest_path):
     ax[2].plot(yearly_counts)
     ax[2].set_title('Yearly Counts', fontsize=12, fontweight="bold")
 
-    plt.style.use("seaborn-whitegrid")
+    plt.style.use("seaborn-v0_8-whitegrid")
     plt.savefig(dest_path, dpi=300)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
 
 def make_top_n_words_graph(kwd_df, top_n, dest_path):
@@ -44,7 +54,14 @@ def make_top_n_words_graph(kwd_df, top_n, dest_path):
     :param dest_path:
     """
     start_time = time.time()
-    print("INFO: Making Top n Words graph to " + str(dest_path))
+    print(f"INFO: Saving Top n Words graph to {dest_path}")
+
+    if platform.system() == "Windows":
+        font_name = font_manager.FontProperties(
+            fname=str(os.path.join(os.environ["WINDIR"], "Fonts")) + "/malgun.ttf").get_name()
+        rc('font', family=font_name)
+    elif platform.system() == "Darwin":
+        rc("font", family="AppleGothic")
 
     word_count = Counter(chain(*[str(x).split(" ") for x in kwd_df.tolist()]))
     word_top_n = word_count.most_common(top_n)
@@ -60,8 +77,8 @@ def make_top_n_words_graph(kwd_df, top_n, dest_path):
     ax.set_xlabel('Word', fontsize=10)
     ax.set_ylabel('Number of occurrence', fontsize=10, fontweight="bold")
 
-    plt.style.use("seaborn-whitegrid")
+    plt.style.use("seaborn-v0_8-whitegrid")
     plt.savefig(dest_path, dpi=300)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")

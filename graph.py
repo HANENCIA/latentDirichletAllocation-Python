@@ -2,8 +2,11 @@
 
 import time
 import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+import os
 import numpy as np
 import pandas as pd
+import platform
 import seaborn as sb
 
 import common
@@ -20,14 +23,19 @@ def make_topic_graph(topic_matrix, keyword_dtm, n_topics, vectorizer, dest_path)
     :param dest_path:
     """
     start_time = time.time()
-    print("INFO: Making Num of Articles graph to " + str(dest_path))
+    print("INFO: Saving Num of Articles graph to " + str(dest_path))
+
+    if platform.system() == "Windows":
+        font_name = font_manager.FontProperties(
+            fname=str(os.path.join(os.environ["WINDIR"], "Fonts")) + "/malgun.ttf").get_name()
+        rc('font', family=font_name)
+    elif platform.system() == "Darwin":
+        rc("font", family="AppleGothic")
 
     keys = common.get_keys(topic_matrix)
     categories, counts = common.keys_to_counts(keys)
     top_3_words = common.get_top_n_words(3, keys, keyword_dtm, n_topics, vectorizer)
     labels = ['Topic {}: \n'.format(i) + top_3_words[i] for i in categories]
-    print('top 3 words: \n', top_3_words)
-    print('labels: \n', labels)
 
     fig, ax = plt.subplots(figsize=(50, 30))
     ax.bar(categories, counts)
@@ -36,11 +44,11 @@ def make_topic_graph(topic_matrix, keyword_dtm, n_topics, vectorizer, dest_path)
     ax.set_xticklabels(labels, fontsize=8, rotation=45)
     ax.set_ylabel('Number of newspaper', fontsize=12)
 
-    plt.style.use("seaborn-whitegrid")
+    plt.style.use("seaborn-v0_8-whitegrid")
     plt.savefig(dest_path, dpi=300)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time-start_time, 2)}s")
 
 
 def make_year_density_graph(keyword_df, vectorizer, lda_model, n_topics, start_year, end_year, csv_dest_path,
@@ -57,7 +65,14 @@ def make_year_density_graph(keyword_df, vectorizer, lda_model, n_topics, start_y
     :param dest_path
     """
     start_time = time.time()
-    print("INFO: Making Year Desntiy Graph " + str(dest_path))
+    print(f"INFO: Saving Year Desntiy Graph to {graph_dest_path}")
+
+    if platform.system() == "Windows":
+        font_name = font_manager.FontProperties(
+            fname=str(os.path.join(os.environ["WINDIR"], "Fonts")) + "/malgun.ttf").get_name()
+        rc('font', family=font_name)
+    elif platform.system() == "Darwin":
+        rc("font", family="AppleGothic")
 
     yearly_data = []
     for i in range(start_year, end_year + 1):
@@ -87,8 +102,8 @@ def make_year_density_graph(keyword_df, vectorizer, lda_model, n_topics, start_y
     fig, ax = plt.subplots(figsize=(14, 10))
     sb.heatmap(yearly_topic_counts, cmap="YlGnBu", ax=ax)
 
-    plt.style.use("seaborn-whitegrid")
+    plt.style.use("seaborn-v0_8-whitegrid")
     plt.savefig(graph_dest_path, dpi=300)
 
     end_time = time.time()
-    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time-start_time, 2)}s")
