@@ -1,27 +1,24 @@
-import pandas as pd
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
-from gensim import corpora
-import gensim
-import pyLDAvis.gensim
-from sklearn.externals import joblib
+# -*- coding: utf-8 -*-
 
-if __name__ == "__main__":
-    data = pd.read_csv('patent_KITECH.csv', encoding='utf-8').CONTENTS
-    data3=[]
-    for doc in data:
-        data2 = word_tokenize(doc) # tokenizing & lowering
-        data3.append(data2)
+import pyLDAvis.sklearn
+import time
 
-    dictionary = corpora.Dictionary(data3)
-    corpus = [dictionary.doc2bow(word) for word in data3]
 
-    lda = gensim.models.ldamulticore.LdaMulticore(corpus, batch=False, iterations=12, num_topics=10, id2word=dictionary, passes=1, workers=10)
+def make_ldavis(lda_model, keyword_dtm, vectorizer, dest_path):
+    """
+    make_ldavis makes LDAvis html file
 
-    dictionary.save_as_text('dictionary.txt')
-    corpora.MmCorpus.serialize('corpus.mm', corpus)
-    joblib.dump(lda, 'model.pkl')
+    :param lda_model:
+    :param keyword_dtm:
+    :param vectorizer:
+    :param dest_path
+    """
+    start_time = time.time()
+    print("INFO: Saving LDAvis to " + str(dest_path))
 
-    lda_vis_ex51 = pyLDAvis.gensim.prepare(lda, corpus, dictionary)
-    pyLDAvis.show(lda_vis_ex51)
+    lda_vis = pyLDAvis.sklearn.prepare(lda_model, keyword_dtm, vectorizer)
+    # pyLDAvis.show(lda_vis)
+    pyLDAvis.save_html(lda_vis, dest_path)
+
+    end_time = time.time()
+    print("INFO: completed! elapsed time " + str(round(end_time - start_time, 2)) + "s")
