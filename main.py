@@ -17,12 +17,12 @@ import glob
 import json
 import os
 
-import eda
-import graph
-import lda
-import ldavis
-import preprocessing
-import tsne
+from module import eda
+from module import graph
+from module import lda
+from module import ldavis
+from module import preprocessing
+from module import tsne
 
 
 def main():

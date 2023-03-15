@@ -31,7 +31,7 @@
     "RANDOM_STATE": 0
   },
   "RESULT_TOPIC_WORDS": {
-    "WORD_COUNT": 10,
+    "WORD_COUNT": 30,
     "CSV_PATH": "./result/sample/topic_words.csv",
     "GRAPH_PATH": "./result/sample/topic_words.png"
   },

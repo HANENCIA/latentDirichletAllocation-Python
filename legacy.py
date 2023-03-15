@@ -17,6 +17,7 @@ from datetime import datetime
 import itertools
 # from nltk.corpus import stopwords
 import numpy as np
+import os
 import pandas as pd
 from scipy.sparse import coo_matrix
 from sklearn.decomposition import NMF, LatentDirichletAllocation as LDA
@@ -176,12 +177,15 @@ def main():
     n_topics = 5
     n_iter = 10
 
-    top_n_words = 10
+    top_n_words = 30
     start_year = 2022
     end_year = 2022
 
     result_topic_words_csv_path = "./result/sample_legacy/topic_words.csv"
     result_topic_ratio_year_csv_path = "./result/sample_legacy/topic_ratio_year.csv"
+
+    os.makedirs("/".join(result_topic_words_csv_path.split("/")[:-1]), exist_ok=True)
+    os.makedirs("/".join(result_topic_ratio_year_csv_path.split("/")[:-1]), exist_ok=True)
 
     corpus = Corpus(raw_csv_path, raw_sep, raw_enc, keyword_col_name, date_col_name, tfidf_ngram, tfidf_max_tf,
                     tfidf_min_tf, tfidf_max_features)

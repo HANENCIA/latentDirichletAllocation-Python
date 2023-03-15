@@ -5,7 +5,7 @@ import pandas as pd
 import pickle
 from sklearn.decomposition import LatentDirichletAllocation
 
-import common
+from . import common
 
 
 def topic_modeling(keyword_dtm, n_topics, learning_method="batch", max_iter=100, random_state=0, n_jobs=-1):

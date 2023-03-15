@@ -9,7 +9,7 @@ import pandas as pd
 import platform
 import seaborn as sb
 
-import common
+from . import common
 
 
 def make_topic_graph(topic_matrix, keyword_dtm, n_topics, vectorizer, dest_path):
@@ -48,7 +48,7 @@ def make_topic_graph(topic_matrix, keyword_dtm, n_topics, vectorizer, dest_path)
     plt.savefig(dest_path, dpi=300)
 
     end_time = time.time()
-    print(f"INFO: Completed. Elapsed Time: {round(end_time-start_time, 2)}s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
 
 
 def make_year_density_graph(keyword_df, vectorizer, lda_model, n_topics, start_year, end_year, csv_dest_path,
@@ -106,4 +106,4 @@ def make_year_density_graph(keyword_df, vectorizer, lda_model, n_topics, start_y
     plt.savefig(graph_dest_path, dpi=300)
 
     end_time = time.time()
-    print(f"INFO: Completed. Elapsed Time: {round(end_time-start_time, 2)}s")
+    print(f"INFO: Completed. Elapsed Time: {round(end_time - start_time, 2)}s")
