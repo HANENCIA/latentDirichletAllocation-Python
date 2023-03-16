@@ -50,15 +50,21 @@ def get_top_n_words(n_words, keys, document_term_matrix, n_topics, vectorizer):
     return top_words
 
 
-def keys_to_counts(keys):
+def keys_to_counts(keys, n_topics):
     """
     keys_to_counts get number of document (counts) classified in each topic (categories)
         connecting with get_topic_graph(), get_tsne_graph()
     :param keys:
+    :param n_topics:
     :return:
     """
     count_pairs = Counter(keys).items()
+    topics_lst = list(np.arange(0, n_topics))
     categories = [pair[0] for pair in count_pairs]
     counts = [pair[1] for pair in count_pairs]
+    categories_zero = set(topics_lst) - set(categories)
+    for e in categories_zero:
+        categories.append(e)
+        counts.append(0)
     ret = (categories, counts)
     return ret

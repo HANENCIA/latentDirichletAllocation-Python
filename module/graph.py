@@ -33,7 +33,7 @@ def make_topic_graph(topic_matrix, keyword_dtm, n_topics, vectorizer, dest_path)
         rc("font", family="AppleGothic")
 
     keys = common.get_keys(topic_matrix)
-    categories, counts = common.keys_to_counts(keys)
+    categories, counts = common.keys_to_counts(keys, n_topics)
     top_3_words = common.get_top_n_words(3, keys, keyword_dtm, n_topics, vectorizer)
     labels = ['Topic {}: \n'.format(i) + top_3_words[i] for i in categories]
 
@@ -90,7 +90,7 @@ def make_year_density_graph(keyword_df, vectorizer, lda_model, n_topics, start_y
 
     yearly_counts = []
     for keys in yearly_keys:
-        categories, counts = common.keys_to_counts(keys)
+        categories, counts = common.keys_to_counts(keys, n_topics)
         yearly_counts.append(counts)
 
     yearly_topic_counts = pd.DataFrame(
